@@ -15,7 +15,7 @@ jobs:
           uses: sigstore/cosign-installer@v2.0.0
   
         - name: Retrieve signing key from secrets
-          run: 'echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key'
+          run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
           shell: bash
   
         - name: Sign container image
