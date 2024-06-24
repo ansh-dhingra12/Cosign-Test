@@ -1,6 +1,10 @@
 ---
 on: [push]
 
+env:
+    REGISTRY: docker.io
+    IMAGE_NAME: cosigncontainer
+
 jobs:
     build:
       runs-on: ubuntu-latest
@@ -12,12 +16,10 @@ jobs:
   
         - name: Retrieve signing key from secrets
           run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
-          # Ensure proper file permissions (optional)
-          # run: chmod 600 cosign.key
   
         - name: Sign container image
           run: |
             cosign sign --key cosign.key \
-              ghcr.io/your-org/your-repo:some-tag
+              ${{ env.REGISTRY }}/blackadam12/${{ env.IMAGE_NAME }}:latest  
           env:
-            COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}"  # If your key requires a password
+            COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}"
