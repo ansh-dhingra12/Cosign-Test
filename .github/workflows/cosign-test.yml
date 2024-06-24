@@ -1,0 +1,26 @@
+---
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        # Other build steps here
+  
+        - name: Install Cosign
+          uses: sigstore/cosign-installer@main
+  
+        - name: Retrieve signing key from secrets
+          run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+          # Ensure proper file permissions (optional)
+          # run: chmod 600 cosign.key
+  
+        - name: Sign container image
+          run: |
+            cosign sign --key cosign.key \
+              ghcr.io/your-org/your-repo:some-tag
+          env:
+            COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}"  # If your key requires a password
